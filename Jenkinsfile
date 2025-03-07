@@ -1,37 +1,21 @@
 pipeline {
     agent any
-
-    parameters {
-        booleanParam(name: 'RUN_TESTS', defaultValue: false, description: 'Run JUnit tests')
-    }
-
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/errachidy10/VideoExplicatio.git', branch: 'master'
+                git url: 'https://github.com/errachidy10/VideoExplicatio.git',
             }
         }
-
         stage('Build') {
             steps {
-                bat 'mvn -Dmaven.test.failure.ignore=true clean package'
+                sh 'mvn clean install' // Si vous utilisez Maven
+                // sh './gradlew build' // Si vous utilisez Gradle (remplacez 'build' par la tâche appropriée)
             }
         }
-    }
-
-    post {
-        success {
-            script {
-                if (params.RUN_TESTS) {
-                    junit 'target/surefire-reports/*.xml'
-                } else {
-                    echo 'Tests skipped.'
-                }
+        stage('Test') {
+            steps {
+                sh 'mvn test'  // Si vous utilisez Maven et avez des tests
             }
-            echo 'Build succeeded!'
-        }
-        failure {
-            echo 'Build failed!'
         }
     }
 }
