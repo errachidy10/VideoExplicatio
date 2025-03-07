@@ -3,7 +3,8 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/errachidy10/VideoExplicatio.git',
+                git url: 'https://github.com/VOTRE_NOM_UTILISATEUR/simple-java-app.git',
+                    credentialsId: 'github-credentials' // Remplacez si nécessaire
             }
         }
         stage('Build') {
